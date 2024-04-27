@@ -1,6 +1,5 @@
 import base64
 import json
-import logging
 import os
 import random
 import tempfile
@@ -35,9 +34,6 @@ bot = Bot(token=bot_token)
 dp = Dispatcher()
 
 router = Router(name=__name__)
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 
 class InputFileBytes(InputFile):
@@ -323,17 +319,17 @@ async def send_presentation(message: types.Message):
 
 # PILLOW INVERSION =====================================================================================================
 class AIFiltersPIL(StatesGroup):
-    NegPil = State()
+    InvertPil = State()
 
 
 @router.message(Command("invert", prefix="/"))
 async def start_inverting_colors_pil(message: types.Message, state: FSMContext):
     print("Received /invert command")
     await message.answer("Please send the photo to invert the colors.")
-    await state.set_state(AIFiltersPIL.NegPil)
+    await state.set_state(AIFiltersPIL.InvertPil)
 
 
-@router.message(F.photo, StateFilter(AIFiltersPIL.NegPil))
+@router.message(F.photo, StateFilter(AIFiltersPIL.InvertPil))
 async def handle_photo_inversion_pil(message: types.Message, state: FSMContext):
     print("Handling photo inversion")
     try:
@@ -342,7 +338,6 @@ async def handle_photo_inversion_pil(message: types.Message, state: FSMContext):
         await send_processed_photo(message, processed_photo_data)
         await state.clear()
     except Exception as e:
-        logger.exception("Failed to process photo:", exc_info=e)
         await message.answer("Failed to process the photo. Please try again later.")
 
 
@@ -376,7 +371,6 @@ async def process_photo_inversion(photo_data: bytes) -> bytes:
 
         return inverted_image_data
     except Exception as e:
-        logger.exception("Failed to process photo inversion:", exc_info=e)
         raise
 
 

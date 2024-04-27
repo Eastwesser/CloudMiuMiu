@@ -1,6 +1,5 @@
 import asyncio
 import copy
-import logging
 import random
 from typing import Any, Awaitable, Callable, Dict
 
@@ -24,8 +23,6 @@ BLACKJACK_VALUES = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K",
 round_number = 1
 health_p1 = 10
 health_p2 = 10
-
-logging.basicConfig(level=logging.DEBUG)
 
 
 def build_rps_keyboard() -> InlineKeyboardMarkup:

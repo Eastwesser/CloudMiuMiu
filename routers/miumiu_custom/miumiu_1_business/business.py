@@ -1,6 +1,5 @@
 import datetime
 import json
-import logging
 import os
 from datetime import datetime, timedelta
 from typing import Dict
@@ -40,8 +39,6 @@ dp = Dispatcher(bot=bot, storage=MemoryStorage())
 data_amount = 0
 
 router = Router(name=__name__)
-
-logging.basicConfig(level=logging.DEBUG)
 
 weather_translations = {
     'Clouds': 'Облачно',

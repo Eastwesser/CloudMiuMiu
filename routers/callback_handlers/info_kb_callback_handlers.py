@@ -28,4 +28,3 @@ async def handle_random_num_modal_cb(callback_query: CallbackQuery):
         text=f"Random number: {randint(1, 100)}",
         show_alert=True,
     )
-   

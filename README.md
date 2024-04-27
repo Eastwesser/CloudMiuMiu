@@ -66,7 +66,6 @@ jsonschema==4.21.1
 jsonschema-specifications==2023.12.1
 lazy_loader==0.4
 llvmlite==0.42.0
-logging==0.4.9.6
 magic-filter==1.0.12
 moviepy==1.0.3
 mpmath==1.3.0
