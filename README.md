@@ -50,7 +50,9 @@ charset-normalizer==3.3.2
 colorama==0.4.6
 coloredlogs==15.0.1
 decorator==4.4.2
+distlib==0.3.8
 distro==1.9.0
+filelock==3.13.4
 flatbuffers==24.3.25
 frozenlist==1.4.1
 h11==0.14.0
@@ -70,7 +72,6 @@ moviepy==1.0.3
 mpmath==1.3.0
 multidict==6.0.5
 networkx==3.3
-numba==0.59.1
 numpy==1.26.4
 onnxruntime==1.17.3
 openai==1.23.6
@@ -84,12 +85,10 @@ protobuf==5.26.1
 pydantic==2.7.1
 pydantic-settings==2.2.1
 pydantic_core==2.18.2
-PyMatting==1.1.12
 pyreadline3==3.4.1
 python-dotenv==1.0.1
 pytz==2024.1
 referencing==0.35.0
-rembg==2.0.56
 requests==2.31.0
 rpds-py==0.18.0
 scikit-image==0.23.2
@@ -102,6 +101,7 @@ tifffile==2024.4.24
 tqdm==4.66.2
 typing_extensions==4.11.0
 urllib3==2.2.1
+virtualenv==20.26.0
 wikipedia==1.4.0
 yarl==1.9.4
 ```
