@@ -22,7 +22,6 @@ from aiogram.types import Message
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from dotenv import load_dotenv
 from moviepy.video.io.VideoFileClip import VideoFileClip
-from rembg import remove
 
 from keyboards.inline_keyboards.actions_kb import build_actions_kb
 
@@ -322,10 +321,9 @@ async def send_presentation(message: types.Message):
     await message.answer_document(types.FSInputFile(presentation_path, presentations[0]))
 
 
-# PILLOW INVERSION AND REMBG ===========================================================================================
+# PILLOW INVERSION =====================================================================================================
 class AIFiltersPIL(StatesGroup):
     NegPil = State()
-    RemoveBg = State()
 
 
 @router.message(Command("invert", prefix="/"))
@@ -335,33 +333,12 @@ async def start_inverting_colors_pil(message: types.Message, state: FSMContext):
     await state.set_state(AIFiltersPIL.NegPil)
 
 
-@router.message(Command("rembg", prefix="!/"))
-async def remove_background_start(message: types.Message, state: FSMContext):
-    print("Received /rembg command")
-    await message.answer("Send a picture to remove the background")
-    await state.set_state(AIFiltersPIL.RemoveBg)
-    logger.info("State set to RemoveBg")
-
-
 @router.message(F.photo, StateFilter(AIFiltersPIL.NegPil))
 async def handle_photo_inversion_pil(message: types.Message, state: FSMContext):
     print("Handling photo inversion")
     try:
         photo_data = await download_photo_data(message)
         processed_photo_data = await process_photo_inversion(photo_data)
-        await send_processed_photo(message, processed_photo_data)
-        await state.clear()
-    except Exception as e:
-        logger.exception("Failed to process photo:", exc_info=e)
-        await message.answer("Failed to process the photo. Please try again later.")
-
-
-@router.message(F.photo, StateFilter(AIFiltersPIL.RemoveBg))
-async def handle_photo_remove_background(message: types.Message, state: FSMContext):
-    print("Handling photo background removal")
-    try:
-        photo_data = await download_photo_data(message)
-        processed_photo_data = await remove_background_rembg(photo_data)
         await send_processed_photo(message, processed_photo_data)
         await state.clear()
     except Exception as e:
@@ -400,24 +377,6 @@ async def process_photo_inversion(photo_data: bytes) -> bytes:
         return inverted_image_data
     except Exception as e:
         logger.exception("Failed to process photo inversion:", exc_info=e)
-        raise
-
-
-async def remove_background_rembg(photo_data: bytes) -> bytes:
-    print("Removing background using rembg")
-    try:
-        image = Image.open(BytesIO(photo_data))
-        processed_image = remove(image)
-
-        output_buffer = BytesIO()
-        processed_image.save(output_buffer, format="PNG")
-        output_buffer.seek(0)
-
-        processed_photo_data = output_buffer.getvalue()
-
-        return processed_photo_data
-    except Exception as e:
-        logger.error(f"Error removing background using rembg: {e}")
         raise
 
 
